@@ -26,10 +26,24 @@ namespace Dhanak.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            return Ok();
-        }
+            var category = await context.Category.ToListAsync();
+            
+            if (category == null)
+            {
+                return BadRequest();
+            }
 
+
+            return Ok(category);
+        }
+        [HttpGet("values/{id}")]
+        public async Task<IActionResult> GetParticular(int id)
+        {
+            var category= await context.Category.SingleOrDefaultAsync(c => c.Id==id);
+            return Ok(category);
+        }
         // GET api/<controller>/5
+
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
@@ -43,8 +57,8 @@ namespace Dhanak.Controllers
             var result = new EventResource()
             {
                 CategoryId = 0,
-                OrganiserResource = new OrganiserResource() { Email = "email" },
-                CoOrdinatorResource = new CoOrdinatorResource() { Name = "name" }
+                Organiser= new OrganiserResource() { Email = "email" },
+                CoOrdinator = new CoOrdinatorResource() { Name = "name" }
 
 
 
@@ -52,14 +66,15 @@ namespace Dhanak.Controllers
             foreach (var e in events)
 
             {
-
+                result.EventId = e.Id;
                 result.EventName = e.EventName;
                 result.CategoryId = e.Category.Id;
-                result.OrganiserResource.Name = e.OrganizerName;
-                result.OrganiserResource.Email = e.OrganizerEmail;
-                result.OrganiserResource.Phone = e.OrganizerPhone;
-                result.CoOrdinatorResource.Name = e.CoOrdinatorName;
-                result.CoOrdinatorResource.Phone = e.OrganizerPhone;
+                result.Organiser.Name = e.OrganizerName;
+                result.Organiser.Email = e.OrganizerEmail;
+                result.Organiser.Phone = e.OrganizerPhone;
+                result.CoOrdinator.Name = e.CoOrdinatorName;
+                result.CoOrdinator.Phone = e.OrganizerPhone;
+                result.Description = e.Description;
                 results.Add(result);
                 i++;
 

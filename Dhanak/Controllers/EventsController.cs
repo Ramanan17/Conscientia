@@ -36,33 +36,37 @@ namespace Dhanak.Controllers
                 return BadRequest();
             }
             int i = 0;
-            var result = new EventResource()
-            {
-                CategoryId = 0,
-                OrganiserResource = new OrganiserResource() { Email="email"},
-                CoOrdinatorResource = new CoOrdinatorResource() { Name = "name"}
-
-
-
-            };
-          foreach (var e in events)
-
-            {
            
+
+            foreach (var e in events)
+
+          {
+              var result = new EventResource()
+              {
+                  CategoryId = 0,
+                  Organiser = new OrganiserResource() { Email = "email" },
+                  CoOrdinator = new CoOrdinatorResource() { Name = "name" }
+
+
+
+              };
+                result.EventId = e.Id;
                 result.EventName = e.EventName;
                result.CategoryId = e.Category.Id;
-                result.OrganiserResource.Name = e.OrganizerName;
-                result.OrganiserResource.Email = e.OrganizerEmail;
-                result.OrganiserResource.Phone = e.OrganizerPhone;
-                result.CoOrdinatorResource.Name = e.CoOrdinatorName;
-                result.CoOrdinatorResource.Phone = e.OrganizerPhone;
-                results.Add(result);
+                result.Organiser.Name = e.OrganizerName;
+                result.Organiser.Email = e.OrganizerEmail;
+                result.Organiser.Phone = e.OrganizerPhone;
+                result.CoOrdinator.Name = e.CoOrdinatorName;
+                result.CoOrdinator.Phone = e.OrganizerPhone;
+              result.Description = e.Description;
+                 results.Add(result);
+                
                 i++;
 
 
             }
 
-            return Ok(results);
+            return Ok(events);
 
 
         }
@@ -79,8 +83,8 @@ namespace Dhanak.Controllers
             var result = new EventResource()
             {
                 CategoryId = 0,
-                OrganiserResource = new OrganiserResource() { Email = "email" },
-                CoOrdinatorResource = new CoOrdinatorResource() { Name = "name" }
+                Organiser = new OrganiserResource() { Email = "email" },
+                CoOrdinator = new CoOrdinatorResource() { Name = "name" }
 
 
 
@@ -88,11 +92,12 @@ namespace Dhanak.Controllers
             result.EventId = e.Id;
             result.EventName = e.EventName;
             result.CategoryId = e.Category.Id;
-            result.OrganiserResource.Name = e.OrganizerName;
-            result.OrganiserResource.Email = e.OrganizerEmail;
-            result.OrganiserResource.Phone = e.OrganizerPhone;
-            result.CoOrdinatorResource.Name = e.CoOrdinatorName;
-            result.CoOrdinatorResource.Phone = e.OrganizerPhone;
+            result.Organiser.Name = e.OrganizerName;
+            result.Organiser.Email = e.OrganizerEmail;
+            result.Organiser.Phone = e.OrganizerPhone;
+            result.CoOrdinator.Name = e.CoOrdinatorName;
+            result.CoOrdinator.Phone = e.OrganizerPhone;
+            result.Description = e.Description;
 
             return Ok(result);
         }
@@ -111,11 +116,12 @@ namespace Dhanak.Controllers
             {
                 EventName = resource.EventName,
                 Category = c,
-                OrganizerName = resource.OrganiserResource.Name,
-                OrganizerEmail=resource.OrganiserResource.Email,
-                OrganizerPhone = resource.OrganiserResource.Phone,
-                CoOrdinatorName = resource.CoOrdinatorResource.Name,
-                CoOrdinatorPhone = resource.CoOrdinatorResource.Phone,
+                OrganizerName = resource.Organiser.Name,
+                OrganizerEmail=resource.Organiser.Email,
+                OrganizerPhone = resource.Organiser.Phone,
+                CoOrdinatorName = resource.CoOrdinator.Name,
+                CoOrdinatorPhone = resource.CoOrdinator.Phone,
+                Description = resource.Description
 
 
 
@@ -139,11 +145,12 @@ namespace Dhanak.Controllers
             var c = await context.Category.SingleOrDefaultAsync(m => m.Id == resource.CategoryId);
             e.EventName = resource.EventName;
             e.Category = c;
-            e.OrganizerName = resource.OrganiserResource.Name;
-            e.OrganizerEmail = resource.OrganiserResource.Email;
-            e.OrganizerPhone = resource.OrganiserResource.Phone;
-            e.CoOrdinatorName = resource.CoOrdinatorResource.Name;
-            e.CoOrdinatorPhone = resource.CoOrdinatorResource.Phone;
+            e.OrganizerName = resource.Organiser.Name;
+            e.OrganizerEmail = resource.Organiser.Email;
+            e.OrganizerPhone = resource.Organiser.Phone;
+            e.CoOrdinatorName = resource.CoOrdinator.Name;
+            e.CoOrdinatorPhone = resource.CoOrdinator.Phone;
+            e.Description = resource.Description;
 
             await context.SaveChangesAsync();
 

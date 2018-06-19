@@ -14,9 +14,11 @@ namespace Dhanak.Controllers.Resources
     
         public int CategoryId { get; set; }
 
-        public OrganiserResource OrganiserResource { get; set; }
+        public OrganiserResource Organiser { get; set; }
 
-        public CoOrdinatorResource CoOrdinatorResource { get; set; }
+        public CoOrdinatorResource CoOrdinator { get; set; }
+
+        public string  Description { get; set; }
        
        
     }

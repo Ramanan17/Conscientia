@@ -1,0 +1,78 @@
+<h2>Edit Events</h2>
+
+<p>{{categoryid}}</p>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+
+            <div class="alert-danger" *ngIf="!validity">
+                Please give proper event name and category
+            </div>
+            <form novalidate #f="ngForm" (submit)="onSubmit(f)" [formGroup]="countryForm">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" [value]="event.eventName" class="form-control" [(ngModel)]="events.eventName" name="name" required minlength="2" #name="ngModel">
+                    <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+
+                        <div *ngIf="name.errors.required">
+                            Event name is required.
+                        </div>
+                        <div *ngIf="name.errors.minlength">
+                            Event name must be at least 2 characters long.
+                        </div>
+
+
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select class="form-control" [(ngModel)]="events.categoryId" name="category" #cat="ngModel" required>
+                      
+                      <option  style='width: 90%;' *ngFor="let c of category" [selected]="categoryid == c.id"  value="{{c.id}}">{{c.name}}</option>
+                       
+                      </select>
+                    <div *ngIf="cat.invalid && (cat.dirty || cat.touched)" class="alert alert-danger">
+                        <div *ngIf="cat.errors.required"> 
+                            Category is required.
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="form-group">
+                    <label for="name">Organiser Name</label>
+                    <input type="text" class="form-control" [value]="event.organiser.name" [(ngModel)]="events.organiser.name" name="organisername">
+
+                </div>
+                <div class="form-group">
+                    <label for="name">Organiser Email</label>
+                    <input type="text" class="form-control" [value]="event.organiser.email" [(ngModel)]="events.organiser.email" name="organiserphone">
+
+                </div>
+                <div class="form-group">
+                    <label for="name">Organiser Phone</label>
+                    <input type="text" class="form-control" [value]="event.organiser.phone" [(ngModel)]="events.organiser.phone" name="organiserphone">
+
+                </div>
+                <div class="form-group">
+                    <label for="name">Co-Ordinator Name</label>
+                    <input type="text" class="form-control" [value]="event.coOrdinator.name" [(ngModel)]="events.coOrdinator.name" name="coordinatorname">
+
+                </div>
+
+                <div class="form-group">
+                    <label for="name">Co-Ordinator Phone</label>
+                    <input type="text" class="form-control" [value]="event.coOrdinator.phone" [(ngModel)]="events.coOrdinator.phone" name="coordinatorphone">
+
+                </div>
+                <div class="form-group">
+                    <label for="name">Description</label>
+                    <input type="text" id="textarea" class="form-control" [value]="event.description" [(ngModel)]="events.description" name="description">
+
+                </div>
+                <input type="submit" class="btn btn-primary">
+            </form>
+        </div>
+    </div>
+</div>

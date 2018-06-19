@@ -23,6 +23,7 @@ namespace Dhanak.Models
        
         public string OrganizerPhone { get; set; }
         public string  CoOrdinatorName { get; set; }
-        public string CoOrdinatorPhone { get; set; }        
+        public string CoOrdinatorPhone { get; set; }
+        public string Description { get; set; }
     }
 }
