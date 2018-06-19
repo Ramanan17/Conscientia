@@ -1,6 +1,6 @@
 <h2>Edit Events</h2>
 
-<p>{{categoryid}}</p>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-4">
@@ -8,7 +8,7 @@
             <div class="alert-danger" *ngIf="!validity">
                 Please give proper event name and category
             </div>
-            <form novalidate #f="ngForm" (submit)="onSubmit(f)" [formGroup]="countryForm">
+            <form novalidate #f="ngForm" (submit)="onSubmit(f)">
                 <div class="form-group">
                     <label for="name">Name</label>
                     <input type="text" [value]="event.eventName" class="form-control" [(ngModel)]="events.eventName" name="name" required minlength="2" #name="ngModel">
@@ -27,7 +27,7 @@
                 </div>
                 <div class="form-group">
                     <label>Category</label>
-                    <select class="form-control" [(ngModel)]="events.categoryId" name="category" #cat="ngModel" required>
+                    <select class="form-control"  [(ngModel)]="event.categoryId" name="category" #cat="ngModel" required>
                       
                       <option  style='width: 90%;' *ngFor="let c of category" [selected]="categoryid == c.id"  value="{{c.id}}">{{c.name}}</option>
                        

@@ -19,9 +19,9 @@ addEvents(event)
 {
   return this.http.post('/api/events',event).pipe(map((response: any) => response.json()));
 }
-editEvents(event)
+editEvents(event,id)
 {
-  return this.http.put("/api/events",event).pipe(map((response: any) => response.json()));
+  return this.http.put("/api/events/"+id,event).pipe(map((response: any) => response.json()));
 }
 
 getEvents()

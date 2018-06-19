@@ -1,7 +1,8 @@
 import { category, events } from './../events';
+import { Router, ActivatedRoute } from '@angular/router';
 import { DataService } from './../../services/data.service';
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+
 import { event } from '../new-event/event';
 
 @Component({
@@ -27,7 +28,7 @@ export class EditEventComponent implements OnInit,AfterViewInit {
     this.route.params.subscribe( params => this.Id=params.id );
     this.dataservice.getEvent(this.Id).subscribe(res => {this.event=res,this.categoryid=res.categoryId});
     //this.categoryid=this.events.categoryId.toString();
-    this.dataservice.getEvent(this.Id).subscribe(res =>{this.events.eventName=res.eventName,this.dataservice.getCategories(res.categoryId).subscribe(a=>{this.events.categoryId=a}),this.events.description=this.event.description,this.events.coOrdinator=res.coOrdinator,this.events.organiser=res.organiser});
+    this.dataservice.getEvent(this.Id).subscribe(res =>{this.events.eventName=res.eventName,this.events.description=this.event.description,this.events.coOrdinator=res.coOrdinator,this.events.organiser=res.organiser});
     this.dataservice.getCategory().subscribe(res => this.category=res)
     
     
@@ -43,9 +44,14 @@ export class EditEventComponent implements OnInit,AfterViewInit {
    {
         if(valid)
         {
+          this.event.eventName=this.events.eventName;
+          //this.event.categoryId=this.categoryid;
+          this.event.coOrdinator=this.events.coOrdinator;
+          this.event.organiser=this.events.organiser;
            
           console.log("pass")     
-          console.log(this.events);
+          console.log(this.event);
+          this.dataservice.editEvents(this.event,this.Id).subscribe();
         }
         else{
           this.validity=false;

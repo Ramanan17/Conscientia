@@ -4,6 +4,7 @@ import { FetchDataComponent } from './../../fetch-data/fetch-data.component';
 import { events, organiser, category } from './../events';
 import { Component, OnInit } from '@angular/core';
 import {FormsModule} from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-new-event',
   templateUrl: './new-event.component.html',
@@ -19,7 +20,7 @@ export class NewEventComponent implements OnInit {
   event:event = { eventName:'',description:'',categoryId:0,coOrdinator:{name:'',phone:''},organiser:{name:'',phone:'',email:''}}
  
 
-  constructor(public dataservice:DataService ) 
+  constructor(public dataservice:DataService,private router:Router ) 
   {
     this.dataservice.getCategory().subscribe(c => this.category=c)
     
@@ -34,6 +35,8 @@ export class NewEventComponent implements OnInit {
      if(valid)
      {
     this.dataservice.addEvents(this.events).subscribe(); 
+    this.router.navigate(['/data']);
+    
      }
     else{
     
