@@ -3,77 +3,84 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import * as firebase from 'firebase/app';
-import { AngularFireAuth } from 'angularfire2/auth';
-import { Observable } from 'rxjs';
-import { GoogleAuthProvider, FacebookAuthProvider } from '@firebase/auth-types';
+import * as auth0 from 'auth0-js';
 
 (window as any).global = window;
 
 @Injectable()
 export class AuthService {
+  userProfile: any;
 
-  authState: any = null;
+  auth0 = new auth0.WebAuth({
+    clientID: 'St20FNUs3A43T7P5PuUMP9N9u5BMLKjC',
+    domain: 'dhanak.auth0.com',
+    responseType: 'token id_token',
+    audience: 'https://dhanak.auth0.com/userinfo',
+    redirectUri: 'http://localhost:50456',
+    
+    scope: 'openid profile'
+  });
+
+  constructor(public router: Router) {}
+
+  public login(): void {
+    this.auth0.authorize();
+  }
  
-
-  constructor(public router: Router,private afAuth: AngularFireAuth) {
-    this.afAuth.authState.subscribe((auth) => {
-      this.authState = auth
+  public handleAuthentication(): void {
+    this.auth0.parseHash((err, authResult) => {
+      if (authResult && authResult.accessToken && authResult.idToken) {
+      //  console.log("authresult",authResult)
+        window.location.hash = '';
+        this.setSession(authResult);
+        this.router.navigate(['/']);
+        window.location.reload();
+      } else if (err) {
+        this.router.navigate(['/']);
+        console.log(err);
+      }
     });
-   
-   
-  }
-  resetPassword(email: string) {
-    var auth = firebase.auth();
-    return auth.sendPasswordResetEmail(email)
-      .then(() => console.log("email sent"))
-      .catch((error) => console.log(error))
-  }
-  get isUserAnonymousLoggedIn(): boolean {
-    return (this.authState !== null) ? this.authState.isAnonymous : false
-  }
-  get currentUserId(): string {
-    return (this.authState !== null) ? this.authState.uid : ''
-  }
-  get currentUserName(): string {
-    return this.authState['email']
-  }
-  get currentUser(): any {
-    return (this.authState !== null) ? this.authState : null;
-  }
- 
-  get isUserEmailLoggedIn(): boolean {
-    if ((this.authState !== null) && (!this.isUserAnonymousLoggedIn)) {
-      return true
-    } else {
-      return false
-    }
-  }
-  signUpWithEmail(email: string, password: string) {
-    return this.afAuth.auth.createUserWithEmailAndPassword(email, password)
-      .then((user) => {
-        this.authState = user
-      })
-      .catch(error => {
-        console.log(error)
-        throw error
-      });
-  }
-  loginWithEmail(email: string, password: string) {
-    return this.afAuth.auth.signInWithEmailAndPassword(email, password)
-      .then((user) => {
-        this.authState = user
-      })
-      .catch(error => {
-        console.log(error)
-        throw error
-      });
-  }
-  signOut(): void {
-    this.afAuth.auth.signOut();
-    this.router.navigate(['/'])
   }
 
+  private setSession(authResult): void {
+    // Set the time that the Access Token will expire at
+    const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
+    localStorage.setItem('access_token', authResult.accessToken);
+    localStorage.setItem('id_token', authResult.idToken);
+    localStorage.setItem('expires_at', expiresAt);
+  }
+
+  public logout(): void {
+    // Remove tokens and expiry time from localStorage
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('id_token');
+    localStorage.removeItem('expires_at');
+    // Go back to the home route
+    this.router.navigate(['/']);
+  }
+  public getProfile(cb): void {
+    const accessToken = localStorage.getItem('access_token');
+    if (!accessToken) {
+      throw new Error('Access Token must exist to fetch profile');
+    }
   
+    const self = this;
+    this.auth0.client.userInfo(accessToken, (err, profile) => {
+      if (profile) {
+        self.userProfile = profile;
+        
+      }
+      cb(err, profile);
+    });
+  }
+
+  public isAuthenticated(): boolean {
+    // Check whether the current time is past the
+    // Access Token's expiry time
+    const expiresAt = JSON.parse(localStorage.getItem('expires_at') || '{}');
+    return new Date().getTime() < expiresAt;
+  }
+  
+
 
 }

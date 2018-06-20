@@ -3,7 +3,7 @@ import { AuthService } from './../services/auth.service';
 import { Component } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { auth } from 'firebase/app';
-import { Auth0Service } from '../services/auth0.service';
+
 
 
 
@@ -14,25 +14,20 @@ import { Auth0Service } from '../services/auth0.service';
 })
 export class NavMenuComponent {
   isExpanded = false;
-
-  constructor(public afAuth: AngularFireAuth,private route:Router,public auth:Auth0Service)
+  profile: any;
+  constructor(public afAuth: AngularFireAuth,private route:Router,public auth:AuthService)
   {
-    console.log(auth.isAuthenticated());
+   // console.log(auth.isAuthenticated());
+   auth.handleAuthentication();
   }
-  
-  login()
-  {
-    this.route.navigate(['/data']);
-  }
-  logout()
-  {
-    this.afAuth.auth.signOut();
-  }
-  collapse() {
-    this.isExpanded = false;
-  }
-
-  toggle() {
-    this.isExpanded = !this.isExpanded;
+  ngOnInit() {
+    if (this.auth.userProfile) {
+      this.profile = this.auth.userProfile;
+    } else {
+      this.auth.getProfile((err, profile) => {
+        this.profile = profile;
+        console.log(this.profile)
+      });
+    }
   }
 }
