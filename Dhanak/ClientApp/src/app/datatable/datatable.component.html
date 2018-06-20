@@ -16,7 +16,10 @@
                 Organiser
             </th>
             <th>
-                Options
+                Edit
+            </th>
+            <th>
+                Delete
             </th>
         </tr>
     </thead>
@@ -34,8 +37,15 @@
             </td>
             <td>
                 <button class="btn btn-block" (click)="onClick(event.id)">Edit</button>
+                
+
+            </td>
+            <td>
+                <button class="btn btn-block" (click)="onDelete(event.id)">Delete</button>
             </td>
         </tr>
 
     </tbody>
 </table>
+
+<input type="button" class="btn btn-primary" value="Reload Page" onClick="document.location.reload(true)">

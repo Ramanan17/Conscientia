@@ -7,11 +7,27 @@
                 <span class='icon-bar'></span>
                 <span class='icon-bar'></span>
             </button>
-            <a class='navbar-brand' [routerLink]='["/"]'>vega</a>
+            <a class='navbar-brand' [routerLink]='["/"]'>Dhanak</a>
         </div>
         <div class='clearfix'></div>
         <div class='navbar-collapse collapse' [ngClass]='{ "in": isExpanded }'>
             <ul class='nav navbar-nav'>
+                    <li [routerLinkActive]='["link-active"]' >
+                        <button
+                        class="btn btn-link"
+                        *ngIf="!auth.isAuthenticated()"
+                        (click)="auth.login()">
+                          Log In
+                      </button>
+                
+                      <button
+                        class="btn btn-link"
+                        *ngIf="auth.isAuthenticated()"
+                        (click)="auth.logout()">
+                          Log Out
+                      </button>
+                                 
+                </li>
                 <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
                     <a [routerLink]='["/"]' (click)='collapse()'>
                         <span class='glyphicon glyphicon-home'></span> Home

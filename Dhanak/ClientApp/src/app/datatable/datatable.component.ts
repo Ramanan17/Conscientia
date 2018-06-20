@@ -10,20 +10,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DatatableComponent implements OnInit {
 
+  // tslint:disable-next-line:whitespace
   events:any[];
+   // tslint:disable-next-line:whitespace
   constructor(public dataService:DataService,public route:Router) {
-    this.dataService.getEvents().subscribe(e => this.events=e);
-    
-    
+    this.dataService.getEvents().subscribe(e => this.events = e);
+    // tslint:disable-next-line:whitespace 
+     // tslint:disable-next-line:whitespace
+     // tslint:disable-next-line:whitespace
    }
 
   ngOnInit() {
+     // tslint:disable-next-line:whitespace
       
   }
-  onClick(id)
+  onDelete(id)
   {
-    this.route.navigate(["/edit/"+id]);
-    
+    return this.dataService.deleteEvent(id).subscribe();
+  }
+  onClick(id) {
+    this.route.navigate(['/edit/' + id]);
+
   }
 
 }

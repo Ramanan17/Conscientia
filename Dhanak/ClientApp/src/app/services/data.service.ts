@@ -36,4 +36,8 @@ getCategories(id)
 {
   return this.http.get("/api/category/values/"+id).pipe(map((response: any) => response.json()));
 }
+deleteEvent(id)
+{
+  return this.http.delete('/api/events/'+id).pipe(map((response: any) => response.json()));
+}
 }

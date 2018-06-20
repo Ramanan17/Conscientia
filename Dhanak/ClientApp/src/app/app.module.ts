@@ -1,3 +1,6 @@
+import { Auth0Service } from './services/auth0.service';
+import { ClientService } from './services/client.service';
+
 import { EditEventComponent } from './components/edit-event/edit-event.component';
 import { NewEventComponent } from './components/new-event/new-event.component';
 import { DataTablesModule } from 'angular-datatables';
@@ -15,8 +18,24 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { DataService } from './services/data.service';
 import { DatatableComponent } from './datatable/datatable.component';
 import { EventComponent } from './components/event/event.component';
+import { AuthService } from './services/auth.service';
+import {AngularFireModule} from 'angularfire2';
+import {AngularFireDatabase} from 'angularfire2/database';
+import {AngularFireAuth} from 'angularfire2/auth';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+import { UserLoginComponent } from './components/user-login/user-login.component';
+import { UserInfoComponent } from './components/user-info/user-info.component';
+import { PasswordlessAuthComponent } from './components/passwordless-auth/passwordless-auth.component';
 
-
+export const firebaseConfig ={
+  apiKey: 'AIzaSyBTLixnmrPVB9x9EM3ilJb0rAmFQlLfKN0',
+    authDomain: 'dhanak-cfdad.firebaseapp.com',
+    databaseURL: 'https://dhanak-cfdad.firebaseio.com',
+    projectId: 'dhanak-cfdad',
+    storageBucket: 'dhanak-cfdad.appspot.com',
+    messagingSenderId: '70648789644'
+};
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,7 +46,11 @@ import { EventComponent } from './components/event/event.component';
     NewEventComponent,
     EditEventComponent,
     DatatableComponent,
-    EventComponent
+    EventComponent,
+    UserLoginComponent,
+    UserInfoComponent,
+    PasswordlessAuthComponent,
+   
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -35,16 +58,21 @@ import { EventComponent } from './components/event/event.component';
     HttpClientModule,
     DataTablesModule,
     FormsModule,
+    AngularFireDatabaseModule ,
+    AngularFireAuthModule,
+    AngularFireModule.initializeApp(firebaseConfig),
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
       {path:'new',component:NewEventComponent},
       {path:'edit/:id',component:EditEventComponent},
-      {path:'data',component:DatatableComponent}
+      {path:'data',component:DatatableComponent},
+      {path:'login',component:PasswordlessAuthComponent},
+      {path:'user',component:UserInfoComponent}
     ])
   ],
-  providers: [DataService],
+  providers: [DataService,AuthService,AngularFireAuth,AngularFireDatabase,ClientService,Auth0Service],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -6,6 +6,7 @@ using AutoMapper;
 using Dhanak.Controllers.Resources;
 using Dhanak.Models;
 using Dhanak.Persistence;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,6 +27,7 @@ namespace Dhanak.Controllers
         }
         // GET: api/<controller>
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Get()
         {
             var results = new List<EventResource>();
@@ -104,6 +106,7 @@ namespace Dhanak.Controllers
 
         // POST api/<controller>
         [HttpPost]
+      
         public async Task<IActionResult> Post([FromBody] EventResource resource)
         {
             if (!ModelState.IsValid)
@@ -135,6 +138,7 @@ namespace Dhanak.Controllers
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]
+   
         public async Task<IActionResult> Put(int id, [FromBody] EventResource resource)
         {
             if (!ModelState.IsValid)
@@ -161,6 +165,7 @@ namespace Dhanak.Controllers
 
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
+
         public async Task<IActionResult> Delete(int id)
         {
             var e = await context.Events.Include(m => m.Category).SingleOrDefaultAsync(m => m.Id == id);
